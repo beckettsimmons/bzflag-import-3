@@ -164,6 +164,21 @@ bool			ComposeDefaultKey::keyRelease(const BzfKeyEvent& key)
       }
       return false;
     }
+    //If tab key pressed.
+    else if (key.ascii == 9){
+      std::string composeString = hud->getComposeString();
+      bool selected = selectMatchingRecipient(composeString);
+      const Player *recipient = myTank->getRecipient();
+      if (composeString.length() != 0 && selected) {
+        void* buf = messageMessage;
+        buf = nboPackUByte(buf, recipient->getId());
+        std::string composePrompt = "Send to ";
+        composePrompt += recipient->getCallSign();
+        composePrompt += ": ";
+        hud->setComposing(composePrompt);
+      }
+      return false;
+    }
   }
 
   if ((key.ascii == 4) || // ^D

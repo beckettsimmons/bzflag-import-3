@@ -88,6 +88,7 @@ int			curlProgressFunc(void* clientp,
 					 double ultotal, double ulnow);
 
 void selectNextRecipient (bool forward, bool robotIn);
+bool selectMatchingRecipient(std::string composeString);
 void handleFlagDropped(Player* tank);
 void setTarget();
 bool shouldGrabMouse();

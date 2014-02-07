@@ -269,6 +269,39 @@ void selectNextRecipient (bool forward, bool robotIn)
   }
 }
 
+//Selects the first matching callsign as message recipient.
+//Returns true if a recipient was selected else returns false.
+bool selectMatchingRecipient (std::string composeString)
+{
+  LocalPlayer *my = LocalPlayer::getMyTank();
+  int i = 0;
+  regex_t re;
+  int status;
+  std::string callSign;
+  std::string pattern;
+  while (i<curMaxPlayers) {
+    pattern = "^";
+    pattern += composeString;
+	//REG_ICASE to make it can insensitive.
+    if (regcomp(&re, pattern.c_str(), REG_EXTENDED|REG_NOSUB|REG_ICASE) != 0) {
+        logDebugMessage(1, "Regex Error\n");
+    }
+
+    if(remotePlayers[i]){
+      callSign = remotePlayers[i]->getCallSign();
+      status = regexec(&re, callSign.c_str(), (size_t) 0, NULL, 0);
+      regfree(&re);
+
+      if (status==0){
+       my->setRecipient(remotePlayers[i]);
+       return true;
+      }
+    }
+    i++;
+  }
+  return false;
+}
+
 //
 // should we grab the mouse?
 //
