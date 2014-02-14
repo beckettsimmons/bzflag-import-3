@@ -164,8 +164,9 @@ bool			ComposeDefaultKey::keyRelease(const BzfKeyEvent& key)
       }
       return false;
     }
-    //If tab key pressed.
-    else if (key.ascii == 9){
+    //If shift +  tab pressed.
+    else if (key.ascii == 9 &&
+	      (key.shift == BzfKeyEvent::ShiftKey)){
       std::string composeString = hud->getComposeString();
       bool selected = selectMatchingRecipient(composeString);
       const Player *recipient = myTank->getRecipient();
